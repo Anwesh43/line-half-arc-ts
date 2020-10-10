@@ -214,3 +214,25 @@ class HalfArcFillLine {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    hafl : HalfArcFillLine = new HalfArcFillLine()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.hafl.draw(context)
+    }
+    
+    handleTap(cb : Function) {
+        this.hafl.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.hafl.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+}
