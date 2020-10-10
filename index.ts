@@ -28,3 +28,49 @@ class ScaleUtil {
         return Math.sin(scale * Math.PI)
     }
 }
+
+class DrawingUtil {
+
+    static drawLine(context : CanvasRenderingContext2D, x1 : number, y1 : number, x2 : number, y2 : number) {
+        context.beginPath()
+        context.moveTo(x1, y1)
+        context.lineTo(x2, y2)
+        context.stroke()
+    }
+
+    static drawHalfArcFill(context : CanvasRenderingContext2D, x : number, y : number, r : number, scale : number) {
+        context.save()
+        context.translate(x, y)
+        context.beginPath()
+        context.arc(r, 0, r, Math.PI / 2, Math.PI)
+        context.clip()
+        context.fillRect(r * scale, -r, r, 2 * r)
+        context.restore()
+    }
+
+    static drawHalfArcFillLine(context : CanvasRenderingContext2D, scale : number) {
+        const sf : number = ScaleUtil.sinify(scale)
+        const sf1 : number = ScaleUtil.divideScale(sf, 0, parts)
+        const sf2 : number = ScaleUtil.divideScale(sf, 1, parts)
+        const r : number = Math.min(w, h) / sizeFactor 
+        context.save()
+        context.translate(w / 2, h / 2)
+        for (var j = 0; j < 2; j++) {
+            context.save()
+            context.scale(1 - 2 * j, 1)
+            context.translate(-w / 2, 0)
+            DrawingUtil.drawLine(context, 0, 0, (w / 2 - r) * sf2, 0)
+            DrawingUtil.drawHalfArcFill(context, (w / 2 - r) * sf2, 0, r, sf1)
+            context.restore()
+        }
+        context.restore()
+    }
+
+    static drawHAFLNode(context : CanvasRenderingContext2D, i : number, scale : number) {
+        context.lineCap = 'round'
+        context.lineWidth = Math.min(w, h) / strokeFactor 
+        context.strokeStyle = colors[i]
+        context.fillStyle = colors[i]
+        DrawingUtil.drawHalfArcFillLine(context, scale)
+    }
+}
