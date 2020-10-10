@@ -1,6 +1,6 @@
 const w : number = window.innerWidth 
 const h : number = window.innerHeight
-const parts : number = 2  
+const parts : number = 3
 const scGap : number = 0.02 / parts 
 const delay : number = 20 
 const strokeFactor : number = 90 
@@ -32,6 +32,9 @@ class ScaleUtil {
 class DrawingUtil {
 
     static drawLine(context : CanvasRenderingContext2D, x1 : number, y1 : number, x2 : number, y2 : number) {
+        if (x1 == x2 && y1 == y2) {
+            return
+        }
         context.beginPath()
         context.moveTo(x1, y1)
         context.lineTo(x2, y2)
@@ -42,9 +45,9 @@ class DrawingUtil {
         context.save()
         context.translate(x, y)
         context.beginPath()
-        context.arc(r, 0, r, Math.PI / 2, Math.PI)
+        context.arc(r, 0, r, 0, 2 * Math.PI)
         context.clip()
-        context.fillRect(r * scale, -r, r, 2 * r)
+        context.fillRect(0, -r, r * scale, 2 * r)
         context.restore()
     }
 
